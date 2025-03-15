@@ -34,7 +34,7 @@ private struct ArticleImage: View {
             if let image = phase.image {
                 image.resizable().aspectRatio(contentMode: .fill)
             } else if phase.error != nil {
-                Image("no-image") .resizable().aspectRatio(contentMode: .fill)
+                Image("no-image").resizable().aspectRatio(contentMode: .fill)
             } else {
                 ProgressView().progressViewStyle(.circular)
             }

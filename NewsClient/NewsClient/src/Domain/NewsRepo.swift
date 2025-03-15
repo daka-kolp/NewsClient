@@ -6,5 +6,5 @@
 //
 
 protocol NewsRepo {
-    func fetchArticles(query: String) async -> Result<[Article], Error>
+    func fetchArticlesByQuery(query: String) async -> Result<[Article], Error>
 }

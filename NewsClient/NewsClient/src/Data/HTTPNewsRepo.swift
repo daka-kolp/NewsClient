@@ -15,7 +15,7 @@ class HTTPNewsRepo: NewsRepo {
         self.networkService = NetworkService()
     }
     
-    func fetchArticles(query: String) async -> Result<[Article], Error> {
+    func fetchArticlesByQuery(query: String) async -> Result<[Article], Error> {
         let paramString = "q=\(query)&apiKey=\(apiKey)"
         let urlString = baseUrl + "/everything" + "?\(paramString)"
         return await fetchArticles(urlString: urlString)

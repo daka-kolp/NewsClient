@@ -25,9 +25,11 @@ class NewsViewModel: ObservableObject {
     @Published var state: NewsState = .initial
     
     func getArticles() async {
+        if case .loading = self.state { return }
+        
         self.state = .loading
         
-        let result = await repo.fetchArticles(query: "Ukraine")
+        let result = await repo.fetchArticlesByQuery(query: "Ukraine")
         
         switch result {
         case .success (let articles):
