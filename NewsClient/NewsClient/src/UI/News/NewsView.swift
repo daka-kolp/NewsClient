@@ -15,7 +15,7 @@ struct NewsView: View {
         VStack{
             switch(newsViewModel.state) {
             case .loading:
-                Text("Loading...")
+                Text("loading")
             case .loaded(let articles):
                 List {
                     ForEach(articles) { article in
@@ -23,7 +23,7 @@ struct NewsView: View {
                     }
                 }
             case .error(let e):
-                Text("\(e)")
+                Text("error\(e)")
             default:
                 Spacer()
             }

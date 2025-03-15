@@ -9,7 +9,23 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        NewsView()
+        TabView {
+            NewsView()
+                .tabItem {
+                    Image(systemName: "newspaper")
+                    Text("news")
+                }
+            FavoriteNewsView()
+                .tabItem {
+                    Image(systemName: "heart.text.square")
+                    Text("favouriteNews")
+                }
+            SettingsView()
+                .tabItem {
+                    Image(systemName: "gearshape")
+                    Text("settings")
+                }
+        }
     }
 }
 
