@@ -5,6 +5,7 @@
 //  Created by Daria Kolpakova on 23.02.2025.
 //
 
+import AlertToast
 import SwiftUI
 
 struct NewsView: View {
@@ -13,25 +14,22 @@ struct NewsView: View {
     
     var body: some View {
         VStack{
-            switch(newsViewModel.state) {
-            case .loading:
-                Text("loading")
-            case .loaded(let articles):
-                List {
-                    ForEach(articles) { article in
-                        ArticleRowView(article: article)
-                    }
+            List {
+                ForEach(Array(newsViewModel.articles.enumerated()), id: \.offset) { index, article in
+                    ArticleRowView(article: article)
                 }
-            case .error(let e):
-                Text("error\(e)")
-            default:
-                Spacer()
+                if newsViewModel.isLoading {
+                    ProgressView().frame(maxWidth: .infinity, maxHeight: .infinity)
+                }
+                if !newsViewModel.isLoading && newsViewModel.error.isEmpty{
+                    Spacer().onAppear { getArticles() }
+                }
             }
         }
-        .onAppear() { getArticles() }
     }
     
     private func getArticles() {
-        Task { await newsViewModel.getArticles() }
+        // Task { await newsViewModel.getArticlesByQuery(query: "Ukraine") }
+        Task { await newsViewModel.getTopArticles() }
     }
 }

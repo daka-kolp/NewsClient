@@ -6,36 +6,94 @@
 //
 
 import Foundation
-
-enum NewsState {
-    case initial
-    case loading
-    case loaded([Article])
-    case error(String)
-}
+import SwiftUI
 
 @MainActor
 class NewsViewModel: ObservableObject {
     private let repo: NewsRepo
     
-    init(repo: NewsRepo = HTTPNewsRepo()) {
+    init(repo: NewsRepo = MockNewsRepo()) {
         self.repo = repo
     }
     
-    @Published var state: NewsState = .initial
+    @Published var newsState = NewsState()
+    private var page = 1
     
-    func getArticles() async {
-        if case .loading = self.state { return }
+    func getTopArticles() async {
+        let countryCode = "us"
         
-        self.state = .loading
+        await getArticles {
+            return await repo.fetchTopArticles(countryCode: countryCode, page: page)
+        }
+    }
+    
+    func getArticlesByQuery(query: String) async {
+        await getArticles {
+            return await repo.fetchArticlesByQuery(query: query, page: page)
+        }
+    }
+    
+    func reset() {
+        newsState = NewsState()
+        page = 1
+    }
+    
+    private func getArticles(fetchArticles: () async -> Result<[Article], Error>) async {
+        if newsState.isLoading { return }
         
-        let result = await repo.fetchArticlesByQuery(query: "Ukraine")
+        newsState = newsState.copyWith(isLoading: true, error: "")
+        
+        let result = await fetchArticles()
         
         switch result {
         case .success (let articles):
-            self.state = .loaded(articles)
+            let allArticles = newsState.articles + articles
+            newsState = newsState.copyWith(articles: allArticles)
+            page += 1
         case .failure (let error):
-            self.state = .error(error.localizedDescription)
+            newsState = newsState.copyWith(error: error.localizedDescription)
         }
+        
+        newsState = newsState.copyWith(isLoading: false)
+    }
+}
+
+class NewsState {
+    var articles: [Article]
+    let isLoading: Bool
+    let error: String
+    
+    init(articles: [Article], isLoading: Bool, error: String) {
+        self.articles = articles
+        self.isLoading = isLoading
+        self.error = error
+    }
+    
+    init() {
+        self.articles = []
+        self.isLoading = false
+        self.error = ""
+    }
+    
+    func copyWith(articles: [Article]? = nil, isLoading: Bool? = nil, error: String? = nil) -> NewsState {
+        return NewsState(
+            articles: articles ?? self.articles,
+            isLoading: isLoading ?? self.isLoading,
+            error: error ?? self.error
+        )
+    }
+}
+
+extension NewsViewModel {
+    var articles: [Article] {
+        get { return newsState.articles }
+    }
+    
+    var isLoading: Bool {
+        get { return newsState.isLoading }
+    }
+    
+    var error: String {
+        get { return newsState.error }
     }
 }

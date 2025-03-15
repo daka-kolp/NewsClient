@@ -12,7 +12,7 @@ struct ArticleRowView: View {
     
     var body: some View {
         HStack {
-            ArticleImage(imageUrl: article.urlToImage)
+            ArticleImage
             VStack(alignment: .leading, spacing: 12.0) {
                 Text(article.title)
                     .foregroundColor(.primary)
@@ -24,22 +24,37 @@ struct ArticleRowView: View {
             }
         }
     }
+    
+    @ViewBuilder
+    private var ArticleImage: some View {
+        if (article.urlToImage == nil) {
+            NoImage()
+        } else {
+            UrlImage(imageUrl: article.urlToImage!)
+        }
+    }
 }
 
-private struct ArticleImage: View {
-    let imageUrl: String?
+private struct UrlImage: View {
+    let imageUrl: String
     
     var body: some View {
-        AsyncImage(url: URL(string: imageUrl ?? "no-image")) { phase in
+        AsyncImage(url: URL(string: imageUrl)) { phase in
             if let image = phase.image {
                 image.resizable().aspectRatio(contentMode: .fill)
             } else if phase.error != nil {
-                Image("no-image").resizable().aspectRatio(contentMode: .fill)
+                NoImage()
             } else {
                 ProgressView().progressViewStyle(.circular)
             }
-        }
-        .frame(width: 80.0, height: 80.0)
-        .clipShape(.rect(cornerRadius: 4.0))
+        }.frame(width: 80.0, height: 80.0).clipShape(.rect(cornerRadius: 4.0))
+    }
+}
+
+private struct NoImage: View {
+    var body: some View {
+        Image("no-image").resizable().aspectRatio(contentMode: .fill)
+            .frame(width: 80.0, height: 80.0)
+            .clipShape(.rect(cornerRadius: 4.0))
     }
 }

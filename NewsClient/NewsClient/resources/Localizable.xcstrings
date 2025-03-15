@@ -1,22 +1,6 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "error%@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Error: %@"
-          }
-        },
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Помилка: %@"
-          }
-        }
-      }
-    },
     "favouriteNews" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -30,22 +14,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Обрані новини"
-          }
-        }
-      }
-    },
-    "loading" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Loading…"
-          }
-        },
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Завантаження…"
           }
         }
       }
