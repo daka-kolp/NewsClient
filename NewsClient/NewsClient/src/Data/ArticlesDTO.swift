@@ -21,6 +21,7 @@ struct ArticleDTO: Decodable {
     let url: String
     let urlToImage: String?
     let content: String
+    let publishedAt: String
     
     func toDomainModel() -> Article {
         return Article(
@@ -30,7 +31,8 @@ struct ArticleDTO: Decodable {
             description: description,
             url: url,
             urlToImage: urlToImage,
-            content: content
+            content: content,
+            publishedAt: parseDateFromString(publishedAt) ?? Date.now
         )
     }
 }

@@ -35,18 +35,3 @@ struct NewsView: View {
         Task { await newsViewModel.getArticles() }
     }
 }
-
-struct ArticleRowView: View {
-    var article: Article
-    
-    var body: some View {
-        VStack(alignment: .leading) {
-            Text(article.title)
-                .foregroundColor(.primary)
-                .font(.headline)
-            Text(article.content)
-                .font(.subheadline)
-                .foregroundColor(.secondary)
-        }
-    }
-}

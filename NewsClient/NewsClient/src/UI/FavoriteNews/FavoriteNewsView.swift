@@ -5,7 +5,7 @@
 //  Created by Daria Kolpakova on 15.03.2025.
 //
 
-import SwiftUICore
+import SwiftUI
 
 struct FavoriteNewsView: View {
     var body: some View {
