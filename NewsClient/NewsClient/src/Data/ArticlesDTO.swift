@@ -28,7 +28,7 @@ struct ArticleDTO: Decodable {
             source: source.name,
             author: author ?? "",
             title: title,
-            description: description,
+            description: description ?? "",
             url: url,
             urlToImage: urlToImage,
             content: content ?? "",

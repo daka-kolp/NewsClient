@@ -15,50 +15,56 @@ struct NewsView: View {
     @State private var task: Task<Void, Never>?
     
     var body: some View {
-        VStack {
-            HStack(alignment: .center) {
-                TextField ("search", text: $searchText)
-                    .textFieldStyle(.roundedBorder)
-                    .padding(EdgeInsets(top: 8.0, leading: 16.0, bottom: 12.0, trailing: 8.0))
-                Button { onSearch() } label: { Image(systemName: "magnifyingglass") }
-                    .disabled(searchText.isEmpty)
-                    .buttonStyle(.borderedProminent)
-                Button { onReload() } label: { Image(systemName: "arrow.clockwise") }
-                    .buttonStyle(.borderedProminent)
-                Spacer().frame(width: 16.0)
-            }
-            
-            Picker(selection: $newsType, label: Text("newsTopic")) {
-                Text("all").tag(0)
-                ForEach(NewsCategory.all) { newsCategory in
-                    Text(LocalizedStringKey(newsCategory.localeKey)).tag(newsCategory.id)
+        NavigationView {
+            VStack {
+                HStack(alignment: .center) {
+                    TextField ("search", text: $searchText)
+                        .textFieldStyle(.roundedBorder)
+                        .padding(EdgeInsets(top: 8.0, leading: 16.0, bottom: 12.0, trailing: 8.0))
+                    Button { onSearch() } label: { Image(systemName: "magnifyingglass") }
+                        .disabled(searchText.isEmpty)
+                        .buttonStyle(.borderedProminent)
+                    Button { onReload() } label: { Image(systemName: "arrow.clockwise") }
+                        .buttonStyle(.borderedProminent)
+                    Spacer().frame(width: 16.0)
                 }
-            }
-            .padding(.horizontal, 16.0)
-            .pickerStyle(SegmentedPickerStyle())
-            .onChange(of: newsType) { _, newTag in onTagChanged(newTag) }
-            
-            ZStack {
-                List {
-                    ForEach(
-                        Array(newsViewModel.articles.enumerated()),
-                        id: \.offset
-                    ) { index, article in ArticleRowView(article: article) }
-                    if newsViewModel.isLoading && !newsViewModel.articles.isEmpty {
-                        ProgressView().frame(maxWidth: .infinity, maxHeight: .infinity).id(Int.random(in: 0..<1000))
-                    }
-                    if !newsViewModel.isLoading && newsViewModel.error.isEmpty {
-                        Spacer().onAppear { getArticles() }
-                    }
-                }
-                .listStyle(.plain)
-                .refreshable { getArticles(useReset: true) }
                 
-                if newsViewModel.articles.isEmpty {
-                    if newsViewModel.isLoading {
-                        Text("loading")
-                    } else {
-                        Text("noArticles")
+                Picker(selection: $newsType, label: Text("newsTopic")) {
+                    Text("all").tag(0)
+                    ForEach(NewsCategory.all) { newsCategory in
+                        Text(LocalizedStringKey(newsCategory.localeKey)).tag(newsCategory.id)
+                    }
+                }
+                .padding(.horizontal, 16.0)
+                .pickerStyle(SegmentedPickerStyle())
+                .onChange(of: newsType) { _, newTag in onTagChanged(newTag) }
+                
+                ZStack {
+                    List {
+                        ForEach(
+                            Array(newsViewModel.articles.enumerated()),
+                            id: \.offset
+                        ) { index, article in
+                            NavigationLink(destination: ArticleView(article: article)) {
+                                ArticleRowView(article: article)
+                            }
+                        }
+                        if newsViewModel.isLoading && !newsViewModel.articles.isEmpty {
+                            ProgressView().frame(maxWidth: .infinity, maxHeight: .infinity).id(Int.random(in: 0..<1000))
+                        }
+                        if !newsViewModel.isLoading && newsViewModel.error.isEmpty {
+                            Spacer().onAppear { getArticles() }
+                        }
+                    }
+                    .listStyle(.plain)
+                    .refreshable { getArticles(useReset: true) }
+                    
+                    if newsViewModel.articles.isEmpty {
+                        if newsViewModel.isLoading {
+                            Text("loading")
+                        } else {
+                            Text("noArticles")
+                        }
                     }
                 }
             }
@@ -131,6 +137,6 @@ private class NewsCategory: Identifiable {
     ]
 }
 
-#Preview {
-    NewsView()
-}
+//#Preview {
+//    NewsView()
+//}
