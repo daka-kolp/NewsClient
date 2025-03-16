@@ -14,7 +14,7 @@
 		FDDB3CBE2D86E03C009EDAA6 /* Exceptions for "NewsClient" folder in "NewsClient" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				resources/Info.plist,
+				Info.plist,
 			);
 			target = FD2E94622D6B939200A80F7E /* NewsClient */;
 		};

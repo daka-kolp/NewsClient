@@ -9,20 +9,30 @@ import Foundation
 
 class MockNewsRepo: NewsRepo {
     private let pageSize = 10
-
+    
     func fetchArticlesByQuery(query: String, page: Int) async -> Result<[Article], Error> {
-        return fetchArticles(page: page) { index in
+        if (query.lowercased() == "test") {
+            return .success([])
+        }
+        
+        return await fetchArticles(page: page) { index in
             return mockArticle(id: "\(page)\(index)", theme: query)
         }
     }
     
     func fetchTopArticles(countryCode: String, page: Int) async -> Result<[Article], Error> {
-        return fetchArticles(page: page) { index in
+        return await fetchArticles(page: page) { index in
             return mockTopArticle(id: "\(page)\(index)")
         }
     }
     
-    private func fetchArticles(page: Int, generateArticle: (_ index: Int) -> Article) -> Result<[Article], Error> {
+    private func fetchArticles(page: Int, generateArticle: (_ index: Int) -> Article) async -> Result<[Article], Error> {
+        do {
+            try await Task.sleep(nanoseconds: 3_000_000_000)
+        } catch {
+            return .failure(NSError(domain: "Task Sleep Error",  code: -1, userInfo: nil))
+        }
+        
         if (page > 3) {
             return .failure(NSError(domain: "No Articles",  code: -1, userInfo: nil))
         }
