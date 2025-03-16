@@ -40,7 +40,8 @@ class NewsViewModel: ObservableObject {
     }
     
     private func getArticles(fetchArticles: () async -> Result<[Article], Error>) async {
-        if newsState.isLoading { return }
+        let uniqueId = Int.random(in: 0..<1000)
+        print("getArticles start \(uniqueId)")
         
         newsState = newsState.copyWith(isLoading: true, error: "")
         
@@ -56,6 +57,8 @@ class NewsViewModel: ObservableObject {
         }
         
         newsState = newsState.copyWith(isLoading: false)
+        
+        print("getArticles end \(uniqueId)")
     }
 }
 

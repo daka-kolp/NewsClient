@@ -12,6 +12,7 @@ struct NewsView: View {
     @StateObject private var newsViewModel = NewsViewModel()
     @State private var newsType = 0
     @State private var searchText: String = ""
+    @State private var task: Task<Void, Never>?
     
     var body: some View {
         VStack {
@@ -81,22 +82,28 @@ struct NewsView: View {
     }
     
     private func getArticles(useReset: Bool = false, query: String = "") {
-        Task {
+        task?.cancel()
+        
+        task = Task.detached {
             if(!query.isEmpty) {
-                if (useReset) { newsViewModel.reset() }
-                newsType = -1
+                if (useReset) { await newsViewModel.reset() }
+                
+                await MainActor.run { newsType = -1 }
+                
                 await newsViewModel.getArticlesByQuery(query: query)
                 return
             }
             
-            if (newsType == -1) { return }
+            if await (newsType == -1) { return }
             
-            if (useReset) { newsViewModel.reset() }
-            switch(newsType) {
+            if (useReset) { await newsViewModel.reset() }
+            switch await (newsType) {
             case 0:
                 await newsViewModel.getTopArticles()
             default:
-                let newsCategory = NewsCategory.all.first(where: { $0.id == newsType })
+                let type = await MainActor.run { return newsType }
+                
+                let newsCategory = NewsCategory.all.first(where: { $0.id == type })
                 guard let newsCategory else { return }
                 
                 await newsViewModel.getArticlesByQuery(query: newsCategory.query)
