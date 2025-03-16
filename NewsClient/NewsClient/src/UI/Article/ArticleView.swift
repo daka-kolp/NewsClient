@@ -25,7 +25,7 @@ struct ArticleView: View {
                     Button { setFavorite() } label: { Image(systemName: "heart") }
                         .buttonStyle(.bordered)
                         .frame(maxWidth: .infinity, alignment: .trailing)
-                    Button { launchLink() } label: { Text(article.url) }
+                    Link(article.url, destination: URL(string: article.url)!)
                     HStack {
                         Text(article.author ?? "").font(.subheadline)
                         Spacer()
