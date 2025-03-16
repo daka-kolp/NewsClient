@@ -16,14 +16,16 @@ struct NewsView: View {
     
     var body: some View {
         VStack {
-            HStack {
+            HStack(alignment: .center) {
                 TextField ("search", text: $searchText)
                     .textFieldStyle(.roundedBorder)
-                    .padding()
+                    .padding(EdgeInsets(top: 8.0, leading: 16.0, bottom: 12.0, trailing: 8.0))
                 Button { onSearch() } label: { Image(systemName: "magnifyingglass") }
                     .disabled(searchText.isEmpty)
+                    .buttonStyle(.borderedProminent)
                 Button { onReload() } label: { Image(systemName: "arrow.clockwise") }
-                    .padding(.horizontal, 16.0)
+                    .buttonStyle(.borderedProminent)
+                Spacer().frame(width: 16.0)
             }
             
             Picker(selection: $newsType, label: Text("newsTopic")) {
@@ -127,4 +129,8 @@ private class NewsCategory: Identifiable {
         .init(query: "sports", localeKey: "sports", id: 1),
         .init(query: "show business", localeKey: "showBusiness", id: 2),
     ]
+}
+
+#Preview {
+    NewsView()
 }
