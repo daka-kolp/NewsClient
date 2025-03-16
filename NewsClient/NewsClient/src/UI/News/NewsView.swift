@@ -22,7 +22,9 @@ struct NewsView: View {
             }
             .padding(.horizontal, 16.0)
             .pickerStyle(SegmentedPickerStyle())
-            .onChange(of: type) { _, __ in onTabChanged() }
+            .onChange(of: type) { _, __ in
+                getArticles(useReset: true)
+            }
             List {
                 ForEach(
                     Array(newsViewModel.articles.enumerated()),
@@ -32,27 +34,29 @@ struct NewsView: View {
                     ProgressView().frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
                 if !newsViewModel.isLoading && newsViewModel.error.isEmpty{
-                    Spacer().onAppear { getArticles() }
+                    Spacer().onAppear {
+                        getArticles()
+                    }
                 }
             }
             .listStyle(.plain)
+            .refreshable {
+                getArticles(useReset: true)
+            }
         }
     }
     
-    private func onTabChanged() {
-        newsViewModel.reset()
-        getArticles()
-    }
-    
-    private func getArticles() {
-        switch(type) {
-        case 0:
-            Task { await newsViewModel.getTopArticles() }
-        default:
-            let newsCategory = NewsCategory.all.first(where:  { $0.id == type })
-            guard let newsCategory else { return }
+    private func getArticles(useReset: Bool = false) {
+        Task {
+            if (useReset) { newsViewModel.reset() }
             
-            Task {
+            switch(type) {
+            case 0:
+                await newsViewModel.getTopArticles()
+            default:
+                let newsCategory = NewsCategory.all.first(where: { $0.id == type })
+                guard let newsCategory else { return }
+                
                 await newsViewModel.getArticlesByQuery(query: newsCategory.query)
             }
         }

@@ -20,6 +20,7 @@ class NewsViewModel: ObservableObject {
     private var page = 1
     
     func getTopArticles() async {
+        /// doesn't work for "ua"
         let countryCode = "us"
         
         await getArticles {

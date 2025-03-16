@@ -10,9 +10,22 @@
 		FD2E94632D6B939200A80F7E /* NewsClient.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NewsClient.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		FDDB3CBE2D86E03C009EDAA6 /* Exceptions for "NewsClient" folder in "NewsClient" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				resources/Info.plist,
+			);
+			target = FD2E94622D6B939200A80F7E /* NewsClient */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		FD2E94652D6B939200A80F7E /* NewsClient */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				FDDB3CBE2D86E03C009EDAA6 /* Exceptions for "NewsClient" folder in "NewsClient" target */,
+			);
 			path = NewsClient;
 			sourceTree = "<group>";
 		};
@@ -259,6 +272,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"NewsClient/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = NewsClient/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -287,6 +301,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"NewsClient/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = NewsClient/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
