@@ -5,10 +5,13 @@
 //  Created by Daria Kolpakova on 16.03.2025.
 //
 
+
 import SwiftUI
 
 struct ArticleView: View {
     let article: Article
+    
+    @StateObject var viewModel = ArticleViewModel()
     
     var body: some View {
         ScrollView {
@@ -20,12 +23,16 @@ struct ArticleView: View {
                         Text(article.description).font(.subheadline)
                     }
                     if !article.content.isEmpty {
-                        Text(article.content).font(.subheadline)
+                        Text(article.content).font(.subheadline).foregroundColor(.secondary)
                     }
-                    Button { setFavorite() } label: { Image(systemName: "heart") }
-                        .buttonStyle(.bordered)
-                        .frame(maxWidth: .infinity, alignment: .trailing)
-                    Link(article.url, destination: URL(string: article.url)!)
+                    Button { setIsFavorite() } label: {
+                        Image(systemName: viewModel.isFavorite ? "heart.fill" : "heart")
+                    }
+                    .buttonStyle(.bordered)
+                    .frame(maxWidth: .infinity, alignment: .trailing)
+                    Link(destination: URL(string: article.url)!) {
+                        Text(article.url).multilineTextAlignment(.leading)
+                    }
                     HStack {
                         Text(article.author ?? "").font(.subheadline)
                         Spacer()
@@ -38,17 +45,18 @@ struct ArticleView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
         }
-        .padding(.all, 24.0)
+        .padding(.horizontal, 24.0)
         .navigationTitle(article.title)
         .navigationBarTitleDisplayMode(.inline)
+        .onAppear { checkIsFavorite() }
     }
     
-    private func setFavorite() {
-        //TODO: add to Favourite/remove from Favourite
+    private func setIsFavorite() {
+        Task { await viewModel.setFavorite(article) }
     }
     
-    private func launchLink() {
-        //TODO: open source link
+    private func checkIsFavorite() {
+        Task { await viewModel.checkIsFavorite(article) }
     }
 }
 
@@ -89,7 +97,7 @@ private struct NoImage: View {
     var body: some View {
         Image("no-image")
             .resizable()
-            .aspectRatio(contentMode: .fill)
+            .aspectRatio(contentMode: .fit)
             .frame(width: 390.0, height: 190.0)
     }
 }

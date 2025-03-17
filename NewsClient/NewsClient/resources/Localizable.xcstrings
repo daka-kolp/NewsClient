@@ -17,19 +17,18 @@
         }
       }
     },
-    "favouriteNews" : {
-      "extractionState" : "manual",
+    "favoriteNews" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Favourite News"
+            "value" : "Favorite News"
           }
         },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Обрані новини"
+            "value" : "Обрані Статті"
           }
         }
       }
@@ -96,6 +95,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Жодних новин не знайдено"
+          }
+        }
+      }
+    },
+    "noFavoriteArticles" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No favorite articles found"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Обраних статтей не знайдено"
           }
         }
       }

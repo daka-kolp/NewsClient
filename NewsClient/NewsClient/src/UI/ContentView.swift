@@ -5,6 +5,7 @@
 //  Created by Daria Kolpakova on 23.02.2025.
 //
 
+
 import SwiftUI
 
 struct ContentView: View {
@@ -18,7 +19,7 @@ struct ContentView: View {
             FavoriteNewsView()
                 .tabItem {
                     Image(systemName: "heart.text.square")
-                    Text("favouriteNews")
+                    Text("favoriteNews")
                 }
             SettingsView()
                 .tabItem {
@@ -29,6 +30,6 @@ struct ContentView: View {
     }
 }
 
-#Preview {
-    ContentView()
-}
+//#Preview {
+//    ContentView()
+//}

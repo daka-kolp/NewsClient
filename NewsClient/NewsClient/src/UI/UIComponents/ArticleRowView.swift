@@ -5,6 +5,7 @@
 //  Created by Daria Kolpakova on 15.03.2025.
 //
 
+
 import SwiftUI
 
 struct ArticleRowView: View {

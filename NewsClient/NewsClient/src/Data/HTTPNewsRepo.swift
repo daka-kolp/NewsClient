@@ -5,14 +5,17 @@
 //  Created by Daria Kolpakova on 23.02.2025.
 //
 
+
 class HTTPNewsRepo: NewsRepo {
+    static let instance = HTTPNewsRepo()
+    
     private let networkService: NetworkServiceProtocol
     
     private let baseUrl = "https://newsapi.org/v2"
     private let apiKey = "48ce1f318d0a4ba98993915123afe27d"
     private let pageSize = 20
     
-    init() {
+    private init() {
         self.networkService = NetworkService()
     }
     

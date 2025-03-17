@@ -5,10 +5,15 @@
 //  Created by Daria Kolpakova on 16.03.2025.
 //
 
+
 import Foundation
 
 class MockNewsRepo: NewsRepo {
+    static let instance = MockNewsRepo()
+    
     private let pageSize = 10
+    
+    private init() {}
     
     func fetchArticlesByQuery(query: String, page: Int) async -> Result<[Article], Error> {
         if (query.lowercased() == "test") {
@@ -28,7 +33,7 @@ class MockNewsRepo: NewsRepo {
     
     private func fetchArticles(page: Int, generateArticle: (_ index: Int) -> Article) async -> Result<[Article], Error> {
         do {
-            try await Task.sleep(nanoseconds: 3_000_000_000)
+            try await Task.sleep(nanoseconds: 1_000_000_000)
         } catch {
             return .failure(NSError(domain: "Task Sleep Error",  code: -1, userInfo: nil))
         }
@@ -41,7 +46,6 @@ class MockNewsRepo: NewsRepo {
         return .success(articles)
     }
     
-    
     private func mockTopArticle(id: String) -> Article {
         return Article(
             source: "https://testnews.com",
@@ -49,7 +53,7 @@ class MockNewsRepo: NewsRepo {
             title: "\(id) Lorem ipsum dolor sit amet, consectetuer adipiscing elit.",
             description: "",
             url: "https://testnews.com/top_news",
-            urlToImage: "https://free-images.com/lg/d44b/cyclopean_isles_sicily_italy.jpg",
+            urlToImage: nil,
             content: "",
             publishedAt: Date.now
         );
@@ -62,7 +66,7 @@ class MockNewsRepo: NewsRepo {
             title: "\(id) \(theme) Lorem ipsum dolor sit amet, consectetuer adipiscing elit.",
             description: "",
             url: "https://testnews.com/\(theme)_news",
-            urlToImage: "https://free-images.com/lg/34b9/lipari_sicily_sea_nature.jpg",
+            urlToImage: nil,
             content: "",
             publishedAt: Date.now
         );

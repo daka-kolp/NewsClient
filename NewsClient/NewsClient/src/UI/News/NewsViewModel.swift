@@ -5,6 +5,7 @@
 //  Created by Daria Kolpakova on 23.02.2025.
 //
 
+
 import Foundation
 import SwiftUI
 
@@ -12,8 +13,8 @@ import SwiftUI
 class NewsViewModel: ObservableObject {
     private let repo: NewsRepo
     
-    init(repo: NewsRepo = MockNewsRepo()) {
-        self.repo = repo
+    init() {
+        self.repo = newsRepoInstance
     }
     
     @Published var newsState = NewsState()

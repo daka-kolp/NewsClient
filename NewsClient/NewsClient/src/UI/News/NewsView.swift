@@ -5,11 +5,12 @@
 //  Created by Daria Kolpakova on 23.02.2025.
 //
 
+
 import SwiftUI
 
 struct NewsView: View {
     
-    @StateObject private var newsViewModel = NewsViewModel()
+    @StateObject private var viewModel = NewsViewModel()
     @State private var newsType = 0
     @State private var searchText: String = ""
     @State private var task: Task<Void, Never>?
@@ -42,25 +43,25 @@ struct NewsView: View {
                 ZStack {
                     List {
                         ForEach(
-                            Array(newsViewModel.articles.enumerated()),
+                            Array(viewModel.articles.enumerated()),
                             id: \.offset
                         ) { index, article in
                             NavigationLink(destination: ArticleView(article: article)) {
                                 ArticleRowView(article: article)
                             }
                         }
-                        if newsViewModel.isLoading && !newsViewModel.articles.isEmpty {
+                        if viewModel.isLoading && !viewModel.articles.isEmpty {
                             ProgressView().frame(maxWidth: .infinity, maxHeight: .infinity).id(Int.random(in: 0..<1000))
                         }
-                        if !newsViewModel.isLoading && newsViewModel.error.isEmpty {
+                        if !viewModel.isLoading && viewModel.error.isEmpty {
                             Spacer().onAppear { getArticles() }
                         }
                     }
                     .listStyle(.plain)
                     .refreshable { getArticles(useReset: true) }
                     
-                    if newsViewModel.articles.isEmpty {
-                        if newsViewModel.isLoading {
+                    if viewModel.articles.isEmpty {
+                        if viewModel.isLoading {
                             Text("loading")
                         } else {
                             Text("noArticles")
@@ -94,27 +95,27 @@ struct NewsView: View {
         
         task = Task.detached {
             if(!query.isEmpty) {
-                if (useReset) { await newsViewModel.reset() }
+                if (useReset) { await viewModel.reset() }
                 
                 await MainActor.run { newsType = -1 }
                 
-                await newsViewModel.getArticlesByQuery(query: query)
+                await viewModel.getArticlesByQuery(query: query)
                 return
             }
             
             if await (newsType == -1) { return }
             
-            if (useReset) { await newsViewModel.reset() }
+            if (useReset) { await viewModel.reset() }
             switch await (newsType) {
             case 0:
-                await newsViewModel.getTopArticles()
+                await viewModel.getTopArticles()
             default:
                 let type = await MainActor.run { return newsType }
                 
                 let newsCategory = NewsCategory.all.first(where: { $0.id == type })
                 guard let newsCategory else { return }
                 
-                await newsViewModel.getArticlesByQuery(query: newsCategory.query)
+                await viewModel.getArticlesByQuery(query: newsCategory.query)
             }
         }
     }

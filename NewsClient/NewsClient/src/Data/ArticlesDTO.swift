@@ -5,6 +5,7 @@
 //  Created by Daria Kolpakova on 23.02.2025.
 //
 
+
 import Foundation
 
 struct ArticlesDTO: Decodable {
@@ -26,7 +27,7 @@ struct ArticleDTO: Decodable {
     func toDomainModel() -> Article {
         return Article(
             source: source.name,
-            author: author ?? "",
+            author: author,
             title: title,
             description: description ?? "",
             url: url,
