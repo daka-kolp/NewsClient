@@ -22,17 +22,15 @@ class HTTPNewsRepo: NewsRepo {
     }
     
     func fetchArticlesByQuery(query: String, page: Int) async -> Result<[Article], Error> {
-        let region = localStorage.region
+        let languageCode = localStorage.articleLanguage
 
-        let paramString = "language=\(region.languageCode)&pageSize=\(pageSize)&page=\(page)&q=\(query)&apiKey=\(apiKey)"
+        let paramString = "language=\(languageCode)&pageSize=\(pageSize)&page=\(page)&q=\(query)&apiKey=\(apiKey)"
         let urlString = baseUrl + "/everything" + "?\(paramString)"
         return await fetchArticles(urlString: urlString)
     }
     
     func fetchTopArticles(page: Int) async -> Result<[Article], Error> {
-        let region = localStorage.region
-        
-        let paramString = "country=\(region.regionCode)&pageSize=\(pageSize)&page=\(page)&apiKey=\(apiKey)"
+        let paramString = "country=us&pageSize=\(pageSize)&page=\(page)&apiKey=\(apiKey)"
         let urlString = baseUrl + "/top-headlines" + "?\(paramString)"
         return await fetchArticles(urlString: urlString)
     }

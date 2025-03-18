@@ -31,7 +31,7 @@ struct NewsView: View {
                 }
                 
                 Picker(selection: $newsType, label: Text("newsTopic")) {
-                    Text("all").tag(0)
+                    Text("topNews").tag(0)
                     ForEach(NewsCategory.all) { newsCategory in
                         Text(LocalizedStringKey(newsCategory.localeKey)).tag(newsCategory.id)
                     }

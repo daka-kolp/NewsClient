@@ -8,7 +8,6 @@
 
 import Foundation
 
-@Observable
 class LocalStorageService {
     static let instance = LocalStorageService()
     
@@ -18,38 +17,14 @@ class LocalStorageService {
     private let encoder = JSONEncoder()
     private let decoder = JSONDecoder()
     
-    private let languageKey = "languageCode"
-    private let regionKey = "region"
+    private let articleLanguageCodeKey = "articleLanguage"
     
-    var language: String {
+    var articleLanguage: String {
         get {
-            access(keyPath: \.languageKey)
-            return defaults.string(forKey: languageKey) ?? defaultLanguage
+            return defaults.string(forKey: articleLanguageCodeKey) ?? defaultLanguageCode
         }
         set {
-            withMutation(keyPath: \.languageKey) {
-                defaults.setValue(newValue, forKey: languageKey)
-            }
-        }
-    }
-    
-    var region: RegionInfo {
-        get {
-            access(keyPath: \.regionKey)
-            if let savedRegionData = defaults.object(forKey: regionKey) as? Data {
-                guard let savedRegion = try? decoder.decode(RegionInfo.self, from: savedRegionData) else {
-                    return RegionInfo.defaultRegion
-                }
-                return savedRegion
-            }
-            return RegionInfo.defaultRegion
-        }
-        set {
-            withMutation(keyPath: \.regionKey) {
-                if let encodedRegion = try? encoder.encode(newValue) {
-                    defaults.set(encodedRegion, forKey: regionKey)
-                }
-            }
+            defaults.setValue(newValue, forKey: articleLanguageCodeKey)
         }
     }
     

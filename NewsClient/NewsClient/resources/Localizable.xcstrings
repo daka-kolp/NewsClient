@@ -1,18 +1,18 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "all" : {
+    "articlesLanguage" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "All"
+            "value" : "Articles’ Language"
           }
         },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Всі"
+            "value" : "Мова статей"
           }
         }
       }
@@ -33,23 +33,6 @@
         }
       }
     },
-    "english" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "English"
-          }
-        },
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "English"
-          }
-        }
-      }
-    },
     "favoriteNews" : {
       "localizations" : {
         "en" : {
@@ -62,39 +45,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Обрані Статті"
-          }
-        }
-      }
-    },
-    "france" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "France"
-          }
-        },
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Франція"
-          }
-        }
-      }
-    },
-    "language" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Language"
-          }
-        },
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Мова"
           }
         }
       }
@@ -181,22 +131,6 @@
         }
       }
     },
-    "region" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Region"
-          }
-        },
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Регіон"
-          }
-        }
-      }
-    },
     "search" : {
       "localizations" : {
         "en" : {
@@ -264,70 +198,18 @@
         }
       }
     },
-    "ukraine" : {
-      "extractionState" : "manual",
+    "topNews" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ukraine"
+            "value" : "Top News"
           }
         },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Україна"
-          }
-        }
-      }
-    },
-    "ukrainian" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Українська"
-          }
-        },
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Українська"
-          }
-        }
-      }
-    },
-    "unitedKingdom" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "United Kingdom"
-          }
-        },
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Велика Британія"
-          }
-        }
-      }
-    },
-    "usa" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "USA"
-          }
-        },
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "США"
+            "value" : "Головні Новини"
           }
         }
       }

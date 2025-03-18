@@ -18,13 +18,6 @@ class NewsViewModel: ObservableObject {
     init() {
         self.repo = newsRepoInstance
         self.localStorage = LocalStorageService.instance
-        
-        withContinuousObservation(of: self.localStorage.region)  { _ in
-            Task {
-                self.reset()
-                await self.getTopArticles()
-            }
-        }
     }
     
     @Published var newsState = NewsState()

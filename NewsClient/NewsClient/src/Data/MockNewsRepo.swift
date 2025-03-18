@@ -23,18 +23,16 @@ class MockNewsRepo: NewsRepo {
             return .success([])
         }
         
-        let region = localStorage.region
+        let languageCode = localStorage.articleLanguage
         
         return await fetchArticles(page: page) { index in
-            return mockArticle(id: "\(page)\(index)_\(region.languageCode)", theme: query)
+            return mockArticle(id: "\(page)\(index)_\(languageCode)", theme: query)
         }
     }
     
     func fetchTopArticles(page: Int) async -> Result<[Article], Error> {
-        let region = localStorage.region
-        
         return await fetchArticles(page: page) { index in
-            return mockTopArticle(id: "\(page)\(index)_\(region.regionCode)")
+            return mockTopArticle(id: "\(page)\(index)")
         }
     }
     

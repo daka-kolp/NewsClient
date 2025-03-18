@@ -15,22 +15,13 @@ struct SettingsView: View {
     var body: some View {
         NavigationStack {
             Form {
-                Picker("language", selection: $viewModel.language) {
+                Picker("articlesLanguage", selection: $viewModel.articleLanguage) {
                     ForEach(viewModel.languages, id: \.self) {
                         Text(LocalizedStringKey($0))
                     }
                 }
-                .onChange(of: viewModel.language) { _, newValue in
-                    onLanguageChanged(newValue)
-                }
-                
-                Picker("region", selection: $viewModel.region) {
-                    ForEach(viewModel.regions, id: \.self) {
-                        Text(LocalizedStringKey($0))
-                    }
-                }
-                .onChange(of: viewModel.region) { _, newValue in
-                    onRegionChanged(newValue)
+                .onChange(of: viewModel.articleLanguage) { _, newValue in
+                    onArticleLanguageChanged(newValue)
                 }
                 
                 Button ("clearCache") { clearCache() }
@@ -39,12 +30,8 @@ struct SettingsView: View {
         }
     }
     
-    func onLanguageChanged(_ language: String) {
-        viewModel.changeLanguage(language)
-    }
-    
-    func onRegionChanged(_ region: String) {
-        viewModel.changeRegion(region)
+    func onArticleLanguageChanged(_ language: String) {
+        viewModel.changeArticleLanguage(language)
     }
     
     func clearCache() {

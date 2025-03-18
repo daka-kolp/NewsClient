@@ -20,47 +20,21 @@ class SettingsViewModel: ObservableObject {
         initProperties()
     }
     
-    @Published var language = "english"
-    @Published var region = "usa"
+    @Published var articleLanguage = defaultLanguage
+    
+    let languages: [String] = languagesDictionary.keys.map { $0 }
     
     private func initProperties() {
-        let languageCode = localStorage.language
-        language = languagesDictionary.first(where: { $0.value == languageCode })?.key ?? "english"
+        let languageCode = localStorage.articleLanguage
+        articleLanguage = languagesDictionary.first(where: { $0.value == languageCode })?.key ?? defaultLanguage
+    }
 
-        let regionInfo = localStorage.region
-        region = regionsDictionary.first(where: { $0.value == regionInfo })?.key ?? "usa"
-    }
-    
-    let languages: [String] = ["english", "ukrainian"]
-    
-    let regions: [String] = ["usa", "unitedKingdom", "ukraine", "france"]
-    
-    let languagesDictionary = [
-        "english": defaultLanguage,
-        "ukrainian": "ua",
-    ]
-    
-    let regionsDictionary = [
-        "usa": RegionInfo.defaultRegion,
-        "unitedKingdom": RegionInfo(regionCode: "gb", languageCode: "en"),
-        "france": RegionInfo(regionCode: "fr", languageCode: "fr"),
-        "ukraine": RegionInfo(regionCode: "ua", languageCode: "ru"),
-    ]
-    
-    func changeLanguage(_ language: String) {
-        let languageCode = languagesDictionary.first(where: { $0.key == language })?.value ?? defaultLanguage
-        localStorage.language = languageCode
-    }
-    
-    func changeRegion(_ region: String) {
-        let region = regionsDictionary.first(where: { $0.key == region })?.value ?? RegionInfo.defaultRegion
-        localStorage.region = region
+    func changeArticleLanguage(_ language: String) {
+        let languageCode = languagesDictionary.first(where: { $0.key == language })?.value ?? defaultLanguageCode
+        localStorage.articleLanguage = languageCode
     }
     
     func clearCache() async {
         await repo.clearSD()
-        
-        localStorage.clear()
-        initProperties()
     }
 }
