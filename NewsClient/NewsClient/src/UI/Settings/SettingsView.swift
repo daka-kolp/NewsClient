@@ -48,7 +48,7 @@ struct SettingsView: View {
     }
     
     func clearCache() {
-        
+        Task { await viewModel.clearCache() }
     }
 }
 

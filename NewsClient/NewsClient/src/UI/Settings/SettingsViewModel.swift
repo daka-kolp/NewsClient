@@ -11,9 +11,11 @@ import SwiftUI
 
 @MainActor
 class SettingsViewModel: ObservableObject {
+    private let repo: NewsRepo
     private let localStorage: LocalStorageService
     
     init() {
+        self.repo = newsRepoInstance
         self.localStorage = LocalStorageService.instance
         initProperties()
     }
@@ -53,5 +55,12 @@ class SettingsViewModel: ObservableObject {
     func changeRegion(_ region: String) {
         let region = regionsDictionary.first(where: { $0.key == region })?.value ?? RegionInfo.defaultRegion
         localStorage.region = region
+    }
+    
+    func clearCache() async {
+        await repo.clearSD()
+        
+        localStorage.clear()
+        initProperties()
     }
 }

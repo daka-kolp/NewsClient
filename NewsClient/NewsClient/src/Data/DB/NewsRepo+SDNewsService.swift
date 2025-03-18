@@ -30,4 +30,9 @@ extension NewsRepo {
         let sdNewsService = await SDNewsService.instance
         return await sdNewsService.isArticleFavorite(article)
     }
+    
+    func clearSD() async {
+        let sdNewsService = await SDNewsService.instance
+        await sdNewsService.clear()
+    }
 }
