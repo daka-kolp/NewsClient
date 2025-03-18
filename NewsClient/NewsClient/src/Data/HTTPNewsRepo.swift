@@ -10,7 +10,7 @@ class HTTPNewsRepo: NewsRepo {
     static let instance = HTTPNewsRepo()
     
     private let networkService: NetworkServiceProtocol
-    private let localStorageService: LocalStorageService
+    private let localStorage: LocalStorageService
     
     private let baseUrl = "https://newsapi.org/v2"
     private let apiKey = "48ce1f318d0a4ba98993915123afe27d"
@@ -18,11 +18,11 @@ class HTTPNewsRepo: NewsRepo {
     
     private init() {
         self.networkService = NetworkService()
-        self.localStorageService = LocalStorageService.instance
+        self.localStorage = LocalStorageService.instance
     }
     
     func fetchArticlesByQuery(query: String, page: Int) async -> Result<[Article], Error> {
-        let region = localStorageService.getNewsRegion()
+        let region = localStorage.region
 
         let paramString = "language=\(region.languageCode)&pageSize=\(pageSize)&page=\(page)&q=\(query)&apiKey=\(apiKey)"
         let urlString = baseUrl + "/everything" + "?\(paramString)"
@@ -30,7 +30,7 @@ class HTTPNewsRepo: NewsRepo {
     }
     
     func fetchTopArticles(page: Int) async -> Result<[Article], Error> {
-        let region = localStorageService.getNewsRegion()
+        let region = localStorage.region
         
         let paramString = "country=\(region.regionCode)&pageSize=\(pageSize)&page=\(page)&apiKey=\(apiKey)"
         let urlString = baseUrl + "/top-headlines" + "?\(paramString)"

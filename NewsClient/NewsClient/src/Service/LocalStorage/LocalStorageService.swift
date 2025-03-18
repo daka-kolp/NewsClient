@@ -8,6 +8,7 @@
 
 import Foundation
 
+@Observable
 class LocalStorageService {
     static let instance = LocalStorageService()
     
@@ -20,28 +21,36 @@ class LocalStorageService {
     private let languageKey = "languageCode"
     private let regionKey = "region"
     
-    func saveAppLanguage(languageCode: String) {
-        defaults.set(languageCode, forKey: languageKey)
-    }
-    
-    func getAppLanguage() -> String {
-        return defaults.string(forKey: languageKey) ?? defaultLanguage
-    }
-    
-    func saveNewsRegion(region: RegionInfo) {
-        if let encodedRegion = try? encoder.encode(region) {
-            defaults.set(encodedRegion, forKey: regionKey)
+    var language: String {
+        get {
+            access(keyPath: \.languageKey)
+            return defaults.string(forKey: languageKey) ?? defaultLanguage
         }
-    }
-    
-    func getNewsRegion() -> RegionInfo {
-        if let savedRegionData = defaults.object(forKey: regionKey) as? Data {
-            guard let savedRegion = try? decoder.decode(RegionInfo.self, from: savedRegionData) else {
-                return RegionInfo.defaultRegion
+        set {
+            withMutation(keyPath: \.languageKey) {
+                defaults.setValue(newValue, forKey: languageKey)
             }
-            return savedRegion
         }
-        return RegionInfo.defaultRegion
+    }
+    
+    var region: RegionInfo {
+        get {
+            access(keyPath: \.regionKey)
+            if let savedRegionData = defaults.object(forKey: regionKey) as? Data {
+                guard let savedRegion = try? decoder.decode(RegionInfo.self, from: savedRegionData) else {
+                    return RegionInfo.defaultRegion
+                }
+                return savedRegion
+            }
+            return RegionInfo.defaultRegion
+        }
+        set {
+            withMutation(keyPath: \.regionKey) {
+                if let encodedRegion = try? encoder.encode(newValue) {
+                    defaults.set(encodedRegion, forKey: regionKey)
+                }
+            }
+        }
     }
     
     func clear() {

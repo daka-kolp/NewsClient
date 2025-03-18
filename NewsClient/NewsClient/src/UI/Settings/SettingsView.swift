@@ -44,7 +44,7 @@ struct SettingsView: View {
     }
     
     func onRegionChanged(_ region: String) {
-        viewModel.changenRegion(region)
+        viewModel.changeRegion(region)
     }
     
     func clearCache() {

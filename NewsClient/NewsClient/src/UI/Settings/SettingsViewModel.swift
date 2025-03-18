@@ -22,10 +22,10 @@ class SettingsViewModel: ObservableObject {
     @Published var region = "usa"
     
     private func initProperties() {
-        let languageCode = localStorage.getAppLanguage()
+        let languageCode = localStorage.language
         language = languagesDictionary.first(where: { $0.value == languageCode })?.key ?? "english"
 
-        let regionInfo = localStorage.getNewsRegion()
+        let regionInfo = localStorage.region
         region = regionsDictionary.first(where: { $0.value == regionInfo })?.key ?? "usa"
     }
     
@@ -47,11 +47,11 @@ class SettingsViewModel: ObservableObject {
     
     func changeLanguage(_ language: String) {
         let languageCode = languagesDictionary.first(where: { $0.key == language })?.value ?? defaultLanguage
-        localStorage.saveAppLanguage(languageCode: languageCode)
+        localStorage.language = languageCode
     }
     
     func changeRegion(_ region: String) {
         let region = regionsDictionary.first(where: { $0.key == region })?.value ?? RegionInfo.defaultRegion
-        localStorage.saveNewsRegion(region: region)
+        localStorage.region = region
     }
 }

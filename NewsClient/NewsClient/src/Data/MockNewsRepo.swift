@@ -11,11 +11,11 @@ import Foundation
 class MockNewsRepo: NewsRepo {
     static let instance = MockNewsRepo()
     
-    private let localStorageService: LocalStorageService
+    private let localStorage: LocalStorageService
     private let pageSize = 10
     
     private init() {
-        self.localStorageService = LocalStorageService.instance
+        self.localStorage = LocalStorageService.instance
     }
     
     func fetchArticlesByQuery(query: String, page: Int) async -> Result<[Article], Error> {
@@ -23,7 +23,7 @@ class MockNewsRepo: NewsRepo {
             return .success([])
         }
         
-        let region = localStorageService.getNewsRegion()
+        let region = localStorage.region
         
         return await fetchArticles(page: page) { index in
             return mockArticle(id: "\(page)\(index)_\(region.languageCode)", theme: query)
@@ -31,7 +31,7 @@ class MockNewsRepo: NewsRepo {
     }
     
     func fetchTopArticles(page: Int) async -> Result<[Article], Error> {
-        let region = localStorageService.getNewsRegion()
+        let region = localStorage.region
         
         return await fetchArticles(page: page) { index in
             return mockTopArticle(id: "\(page)\(index)_\(region.regionCode)")

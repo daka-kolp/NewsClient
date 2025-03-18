@@ -8,13 +8,23 @@
 
 import Foundation
 import SwiftUI
+import Combine
 
 @MainActor
 class NewsViewModel: ObservableObject {
     private let repo: NewsRepo
+    private let localStorage: LocalStorageService
     
     init() {
         self.repo = newsRepoInstance
+        self.localStorage = LocalStorageService.instance
+        
+        withContinuousObservation(of: self.localStorage.region)  { _ in
+            Task {
+                self.reset()
+                await self.getTopArticles()
+            }
+        }
     }
     
     @Published var newsState = NewsState()
