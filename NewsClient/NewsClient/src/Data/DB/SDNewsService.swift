@@ -52,4 +52,8 @@ final class SDNewsService {
         let articles = try? modelContext?.fetch(fetchDescriptor)
         return articles?.map { $0.toDomainModel() } ?? []
     }
+    
+    func clear() {
+        try? modelContext?.delete(model: SDArticle.self)
+    }
 }

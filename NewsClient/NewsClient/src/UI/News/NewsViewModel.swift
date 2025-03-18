@@ -21,11 +21,8 @@ class NewsViewModel: ObservableObject {
     private var page = 1
     
     func getTopArticles() async {
-        /// doesn't work for "ua"
-        let countryCode = "us"
-        
         await getArticles {
-            return await repo.fetchTopArticles(countryCode: countryCode, page: page)
+            return await repo.fetchTopArticles(page: page)
         }
     }
     

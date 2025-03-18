@@ -66,6 +66,23 @@
         }
       }
     },
+    "france" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "France"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Франція"
+          }
+        }
+      }
+    },
     "language" : {
       "localizations" : {
         "en" : {
@@ -277,6 +294,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Українська"
+          }
+        }
+      }
+    },
+    "unitedKingdom" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "United Kingdom"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Велика Британія"
           }
         }
       }

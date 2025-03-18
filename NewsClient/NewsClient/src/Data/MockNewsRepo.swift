@@ -11,23 +11,30 @@ import Foundation
 class MockNewsRepo: NewsRepo {
     static let instance = MockNewsRepo()
     
+    private let localStorageService: LocalStorageService
     private let pageSize = 10
     
-    private init() {}
+    private init() {
+        self.localStorageService = LocalStorageService.instance
+    }
     
     func fetchArticlesByQuery(query: String, page: Int) async -> Result<[Article], Error> {
         if (query.lowercased() == "test") {
             return .success([])
         }
         
+        let region = localStorageService.getNewsRegion()
+        
         return await fetchArticles(page: page) { index in
-            return mockArticle(id: "\(page)\(index)", theme: query)
+            return mockArticle(id: "\(page)\(index)_\(region.languageCode)", theme: query)
         }
     }
     
-    func fetchTopArticles(countryCode: String, page: Int) async -> Result<[Article], Error> {
+    func fetchTopArticles(page: Int) async -> Result<[Article], Error> {
+        let region = localStorageService.getNewsRegion()
+        
         return await fetchArticles(page: page) { index in
-            return mockTopArticle(id: "\(page)\(index)")
+            return mockTopArticle(id: "\(page)\(index)_\(region.regionCode)")
         }
     }
     

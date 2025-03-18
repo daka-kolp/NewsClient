@@ -40,11 +40,11 @@ struct SettingsView: View {
     }
     
     func onLanguageChanged(_ language: String) {
-        
+        viewModel.changeLanguage(language)
     }
     
     func onRegionChanged(_ region: String) {
-        
+        viewModel.changenRegion(region)
     }
     
     func clearCache() {
