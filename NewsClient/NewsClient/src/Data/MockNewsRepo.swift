@@ -26,13 +26,13 @@ class MockNewsRepo: NewsRepo {
         let languageCode = localStorage.articleLanguage
         
         return await fetchArticles(page: page) { index in
-            return mockArticle(id: "\(page)\(index)_\(languageCode)", theme: query)
+            return mockArticle(id: "\(page)\(index)_\(languageCode)", query: query)
         }
     }
     
-    func fetchTopArticles(page: Int) async -> Result<[Article], Error> {
+    func fetchTopArticles(category: String, page: Int) async -> Result<[Article], Error> {
         return await fetchArticles(page: page) { index in
-            return mockTopArticle(id: "\(page)\(index)")
+            return mockTopArticle(id: "\(page)\(index)", category: category)
         }
     }
     
@@ -51,26 +51,26 @@ class MockNewsRepo: NewsRepo {
         return .success(articles)
     }
     
-    private func mockTopArticle(id: String) -> Article {
+    private func mockTopArticle(id: String, category: String) -> Article {
         return Article(
             source: "https://testnews.com",
             author: nil,
-            title: "\(id) Lorem ipsum dolor sit amet, consectetuer adipiscing elit.",
+            title: "\(id) \(category) Lorem ipsum dolor sit amet, consectetuer adipiscing elit.",
             description: "",
-            url: "https://testnews.com/top_news",
+            url: "https://testnews.com/\(category)_top_news\(id)",
             urlToImage: nil,
             content: "",
             publishedAt: Date.now
         );
     }
     
-    private func mockArticle(id: String, theme: String) -> Article {
+    private func mockArticle(id: String, query: String) -> Article {
         return Article(
             source: "https://testnews.com",
             author: nil,
-            title: "\(id) \(theme) Lorem ipsum dolor sit amet, consectetuer adipiscing elit.",
+            title: "\(id) \(query) Lorem ipsum dolor sit amet, consectetuer adipiscing elit.",
             description: "",
-            url: "https://testnews.com/\(theme)_news",
+            url: "https://testnews.com/\(query)_news\(id)",
             urlToImage: nil,
             content: "",
             publishedAt: Date.now

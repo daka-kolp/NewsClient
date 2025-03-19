@@ -14,6 +14,9 @@ struct NewsView: View {
     @State private var newsType = 0
     @State private var searchText: String = ""
     @State private var task: Task<Void, Never>?
+
+    //TODO: remove
+    @State private var i = 0
     
     var body: some View {
         NavigationView {
@@ -31,13 +34,12 @@ struct NewsView: View {
                 }
                 
                 Picker(selection: $newsType, label: Text("newsTopic")) {
-                    Text("topNews").tag(0)
                     ForEach(NewsCategory.all) { newsCategory in
-                        Text(LocalizedStringKey(newsCategory.localeKey)).tag(newsCategory.id)
+                        Text(LocalizedStringKey(newsCategory.category)).tag(newsCategory.id)
                     }
                 }
                 .padding(.horizontal, 16.0)
-                .pickerStyle(SegmentedPickerStyle())
+                .pickerStyle(.segmented)
                 .onChange(of: newsType) { _, newTag in onTagChanged(newTag) }
                 
                 ZStack {
@@ -51,14 +53,24 @@ struct NewsView: View {
                             }
                         }
                         if viewModel.isLoading && !viewModel.articles.isEmpty {
-                            ProgressView().frame(maxWidth: .infinity, maxHeight: .infinity).id(Int.random(in: 0..<1000))
+                            ProgressView()
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                .id(Int.random(in: 0..<1000))
                         }
-                        if !viewModel.isLoading && viewModel.error.isEmpty {
-                            Spacer().onAppear { getArticles() }
-                        }
+                          //TODO: uncomment, bugfix
+//                        if !viewModel.isLoading && viewModel.error.isEmpty {
+//                            Spacer().onAppear {
+//                                print("spacer articles \(i)")
+//                                getArticles()
+//                            }
+//                        }
                     }
                     .listStyle(.plain)
-                    .refreshable { getArticles(useReset: true) }
+                      //TODO: uncomment, bugfix
+//                    .refreshable {
+//                        print("refreshable articles \(i)")
+//                        getArticles()
+//                    }
                     
                     if viewModel.articles.isEmpty {
                         if viewModel.isLoading {
@@ -74,7 +86,8 @@ struct NewsView: View {
     
     private func onSearch() {
         if (!searchText.isEmpty) {
-            getArticles(useReset: true, query: searchText)
+            print("onSearch articles \(i)")
+            getArticlesByQuery(useReset: true, query: searchText)
         }
     }
     
@@ -87,11 +100,21 @@ struct NewsView: View {
         if (tag == -1) { return }
         
         searchText = ""
-        getArticles(useReset: true)
+        print("onTagChanged articles \(i) \(tag)")
+        getTopArticles(useReset: true)
     }
     
-    private func getArticles(useReset: Bool = false, query: String = "") {
+    private func getArticles() {
+        if (newsType == -1) {
+            getArticlesByQuery(useReset: true)
+        } else {
+            getTopArticles(useReset: true)
+        }
+    }
+    
+    private func getArticlesByQuery(useReset: Bool = false, query: String = "") {
         task?.cancel()
+        i = i + 1
         
         task = Task.detached {
             if(!query.isEmpty) {
@@ -100,41 +123,41 @@ struct NewsView: View {
                 await MainActor.run { newsType = -1 }
                 
                 await viewModel.getArticlesByQuery(query: query)
-                return
             }
-            
-            if await (newsType == -1) { return }
-            
+        }
+    }
+    
+    private func getTopArticles(useReset: Bool = false) {
+        task?.cancel()
+        i = i + 1
+        
+        task = Task.detached {
             if (useReset) { await viewModel.reset() }
-            switch await (newsType) {
-            case 0:
-                await viewModel.getTopArticles()
-            default:
-                let type = await MainActor.run { return newsType }
-                
-                let newsCategory = NewsCategory.all.first(where: { $0.id == type })
-                guard let newsCategory else { return }
-                
-                await viewModel.getArticlesByQuery(query: newsCategory.query)
-            }
+            
+            let type = await MainActor.run { return newsType}
+            let category = NewsCategory.all.first(where: { $0.id == type })?.category ?? ""
+            await viewModel.getTopArticles(category: category)
         }
     }
 }
 
 private class NewsCategory: Identifiable {
-    let query: String
-    let localeKey: String
+    let category: String
     let id: Int
     
-    init(query: String, localeKey: String, id: Int) {
-        self.query = query
-        self.localeKey = localeKey
+    init(category: String, id: Int) {
+        self.category = category
         self.id = id
     }
     
     static let all: [NewsCategory] = [
-        .init(query: "sports", localeKey: "sports", id: 1),
-        .init(query: "show business", localeKey: "showBusiness", id: 2),
+        .init(category: "general", id: 0),
+        .init(category: "business", id: 1),
+        .init(category: "entertainment", id: 2),
+        .init(category: "health", id: 3),
+        .init(category: "science", id: 4),
+        .init(category: "sports", id: 5),
+        .init(category: "technology", id: 6),
     ]
 }
 

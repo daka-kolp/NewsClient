@@ -23,9 +23,9 @@ class NewsViewModel: ObservableObject {
     @Published var newsState = NewsState()
     private var page = 1
     
-    func getTopArticles() async {
+    func getTopArticles(category: String) async {
         await getArticles {
-            return await repo.fetchTopArticles(page: page)
+            return await repo.fetchTopArticles(category: category, page: page)
         }
     }
     
@@ -41,8 +41,8 @@ class NewsViewModel: ObservableObject {
     }
     
     private func getArticles(fetchArticles: () async -> Result<[Article], Error>) async {
-        let uniqueId = Int.random(in: 0..<1000)
-        print("getArticles start \(uniqueId)")
+//        let uniqueId = Int.random(in: 0..<1000)
+//        print("getArticles start \(uniqueId)")
         
         newsState = newsState.copyWith(isLoading: true, error: "")
         
@@ -59,7 +59,7 @@ class NewsViewModel: ObservableObject {
         
         newsState = newsState.copyWith(isLoading: false)
         
-        print("getArticles end \(uniqueId)")
+//        print("getArticles end \(uniqueId)")
     }
 }
 

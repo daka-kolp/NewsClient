@@ -29,8 +29,11 @@ class HTTPNewsRepo: NewsRepo {
         return await fetchArticles(urlString: urlString)
     }
     
-    func fetchTopArticles(page: Int) async -> Result<[Article], Error> {
-        let paramString = "country=us&pageSize=\(pageSize)&page=\(page)&apiKey=\(apiKey)"
+    func fetchTopArticles(category: String, page: Int) async -> Result<[Article], Error> {
+        let categoryString:String? = if category.isEmpty { nil } else { "&category=\(category)" }
+        var paramString = "country=us&pageSize=\(pageSize)&page=\(page)&apiKey=\(apiKey)"
+        if let categoryString = categoryString { paramString += categoryString }
+        
         let urlString = baseUrl + "/top-headlines" + "?\(paramString)"
         return await fetchArticles(urlString: urlString)
     }
