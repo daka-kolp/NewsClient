@@ -13,10 +13,7 @@ struct NewsView: View {
     @StateObject private var viewModel = NewsViewModel()
     @State private var newsType = 0
     @State private var searchText: String = ""
-    @State private var task: Task<Void, Never>?
-
-    //TODO: remove
-    @State private var i = 0
+    @State private var isTaskRunning = false
     
     var body: some View {
         NavigationView {
@@ -41,6 +38,7 @@ struct NewsView: View {
                 .padding(.horizontal, 16.0)
                 .pickerStyle(.segmented)
                 .onChange(of: newsType) { _, newTag in onTagChanged(newTag) }
+                .disabled(isTaskRunning)
                 
                 ZStack {
                     List {
@@ -57,20 +55,11 @@ struct NewsView: View {
                                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                                 .id(Int.random(in: 0..<1000))
                         }
-                          //TODO: uncomment, bugfix
-//                        if !viewModel.isLoading && viewModel.error.isEmpty {
-//                            Spacer().onAppear {
-//                                print("spacer articles \(i)")
-//                                getArticles()
-//                            }
-//                        }
+                        if !viewModel.isLoading && viewModel.error.isEmpty {
+                            Spacer().onAppear { getArticles() }
+                        }
                     }
                     .listStyle(.plain)
-                      //TODO: uncomment, bugfix
-//                    .refreshable {
-//                        print("refreshable articles \(i)")
-//                        getArticles()
-//                    }
                     
                     if viewModel.articles.isEmpty {
                         if viewModel.isLoading {
@@ -86,8 +75,8 @@ struct NewsView: View {
     
     private func onSearch() {
         if (!searchText.isEmpty) {
-            print("onSearch articles \(i)")
-            getArticlesByQuery(useReset: true, query: searchText)
+            newsType = -1
+            getArticlesByQuery(useReset: true)
         }
     }
     
@@ -98,45 +87,45 @@ struct NewsView: View {
     
     private func onTagChanged(_ tag: Int) {
         if (tag == -1) { return }
-        
         searchText = ""
-        print("onTagChanged articles \(i) \(tag)")
         getTopArticles(useReset: true)
     }
     
     private func getArticles() {
         if (newsType == -1) {
-            getArticlesByQuery(useReset: true)
+            getArticlesByQuery()
         } else {
-            getTopArticles(useReset: true)
+            getTopArticles()
         }
     }
     
-    private func getArticlesByQuery(useReset: Bool = false, query: String = "") {
-        task?.cancel()
-        i = i + 1
+    private func getArticlesByQuery(useReset: Bool = false) {
+        if (isTaskRunning) { return }
         
-        task = Task.detached {
-            if(!query.isEmpty) {
-                if (useReset) { await viewModel.reset() }
+        Task {
+            if(!searchText.isEmpty) {
+                await MainActor.run { isTaskRunning = true }
                 
-                await MainActor.run { newsType = -1 }
+                if (useReset) { viewModel.reset() }
+                await viewModel.getArticlesByQuery(query: searchText)
                 
-                await viewModel.getArticlesByQuery(query: query)
+                await MainActor.run { isTaskRunning = false }
             }
         }
     }
     
     private func getTopArticles(useReset: Bool = false) {
-        task?.cancel()
-        i = i + 1
+        if (isTaskRunning) { return }
         
-        task = Task.detached {
-            if (useReset) { await viewModel.reset() }
+        Task {
+            await MainActor.run { isTaskRunning = true }
             
+            if (useReset) { viewModel.reset() }
             let type = await MainActor.run { return newsType}
             let category = NewsCategory.all.first(where: { $0.id == type })?.category ?? ""
             await viewModel.getTopArticles(category: category)
+            
+            await MainActor.run { isTaskRunning = false }
         }
     }
 }
