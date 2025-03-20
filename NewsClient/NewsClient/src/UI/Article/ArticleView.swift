@@ -95,7 +95,7 @@ private struct UrlImage: View {
 
 private struct NoImage: View {
     var body: some View {
-        Image("no-image")
+        Image("NoImage")
             .resizable()
             .aspectRatio(contentMode: .fit)
             .frame(width: 390.0, height: 190.0)

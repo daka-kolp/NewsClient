@@ -54,7 +54,7 @@ private struct UrlImage: View {
 
 private struct NoImage: View {
     var body: some View {
-        Image("no-image").resizable().aspectRatio(contentMode: .fill)
+        Image("NoImage").resizable().aspectRatio(contentMode: .fill)
             .frame(width: 80.0, height: 80.0)
             .clipShape(.rect(cornerRadius: 4.0))
     }
