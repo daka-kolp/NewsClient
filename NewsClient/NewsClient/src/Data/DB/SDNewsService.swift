@@ -27,19 +27,19 @@ final class SDNewsService {
     }
     
     func removeArticleFromFavorites(_ article: Article) {
-        guard let sdArticle = getArticleByTitle(article.title) else { return }
+        guard let sdArticle = getArticleByUrl(url: article.url) else { return }
         modelContext?.delete(sdArticle)
         try? modelContext?.save()
     }
     
     func isArticleFavorite(_ article: Article) -> Bool {
-        let article = getArticleByTitle(article.title)
+        let article = getArticleByUrl(url: article.url)
         return article != nil
     }
 
-    private func getArticleByTitle(_ articleTitle: String) -> SDArticle? {
+    private func getArticleByUrl(url: String) -> SDArticle? {
         let fetchDescriptor = FetchDescriptor<SDArticle>(
-            predicate: #Predicate<SDArticle> { $0.title == articleTitle }
+            predicate: #Predicate<SDArticle> { $0.url == url }
         )
         let articles = try? modelContext?.fetch(fetchDescriptor)
         return articles?.first
