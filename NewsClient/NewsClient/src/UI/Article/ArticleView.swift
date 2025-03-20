@@ -22,9 +22,6 @@ struct ArticleView: View {
                     if !article.description.isEmpty {
                         Text(article.description).font(.subheadline)
                     }
-                    if !article.content.isEmpty {
-                        Text(article.content).font(.subheadline).foregroundColor(.secondary)
-                    }
                     Button { setIsFavorite() } label: {
                         Image(systemName: viewModel.isFavorite ? "heart.fill" : "heart")
                     }

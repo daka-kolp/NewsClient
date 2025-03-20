@@ -141,12 +141,12 @@ private class NewsCategory: Identifiable {
     
     static let all: [NewsCategory] = [
         .init(category: "general", id: 0),
-        .init(category: "business", id: 1),
-        .init(category: "entertainment", id: 2),
-        .init(category: "health", id: 3),
-        .init(category: "science", id: 4),
-        .init(category: "sports", id: 5),
-        .init(category: "technology", id: 6),
+        .init(category: "entertainment", id: 1),
+        .init(category: "science", id: 2),
+        .init(category: "technology", id: 3),
+//        .init(category: "business", id: 4),
+//        .init(category: "health", id: 5),
+//        .init(category: "sports", id: 6),
     ]
 }
 
